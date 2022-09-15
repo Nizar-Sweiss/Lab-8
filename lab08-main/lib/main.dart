@@ -81,11 +81,9 @@ class _MyAppState extends State<MyApp> {
               audioPlayer.stop();
               minValue = 0;
               position = Duration.zero;
-              duration = audioPlayer.getDuration() as Duration;
+              // duration = audioPlayer.getDuration() as Duration;
+              audioPlayer.seek(Duration.zero);
               maxValue = duration.inSeconds as double;
-
-              
-              
             },
             children: [
               Column(
@@ -112,15 +110,11 @@ class _MyAppState extends State<MyApp> {
                     "Avaril Lavigne",
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
-                  Slider(
-                    min: minValue,
-                    max: maxValue,
-                    value: position.inSeconds.toDouble(),
-                    onChanged: (value) async {
-                      final position = Duration(seconds: value.toInt());
-                      await audioPlayer.seek(position);
-                    },
-                  ),
+                  MySlider(
+                      minValue: minValue,
+                      maxValue: maxValue,
+                      position: position,
+                      audioPlayer: audioPlayer),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
@@ -176,19 +170,11 @@ class _MyAppState extends State<MyApp> {
                     "Avaril Lavigne",
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
-                  Column(
-                    children: [
-                      Slider(
-                        min: 0,
-                        max: duration.inSeconds.toDouble(),
-                        value: position.inSeconds.toDouble(),
-                        onChanged: (value) async {
-                          final position = Duration(seconds: value.toInt());
-                          await audioPlayer.seek(position);
-                        },
-                      ),
-                    ],
-                  ),
+                  MySlider(
+                      minValue: minValue,
+                      maxValue: maxValue,
+                      position: position,
+                      audioPlayer: audioPlayer),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
@@ -224,6 +210,34 @@ class _MyAppState extends State<MyApp> {
               //diff song
             ],
           )),
+    );
+  }
+}
+
+class MySlider extends StatelessWidget {
+  const MySlider({
+    Key? key,
+    required this.minValue,
+    required this.maxValue,
+    required this.position,
+    required this.audioPlayer,
+  }) : super(key: key);
+
+  final double minValue;
+  final double maxValue;
+  final Duration position;
+  final AudioPlayer audioPlayer;
+
+  @override
+  Widget build(BuildContext context) {
+    return Slider(
+      min: minValue,
+      max: maxValue,
+      value: position.inSeconds.toDouble(),
+      onChanged: (value) async {
+        final position = Duration(seconds: value.toInt());
+        await audioPlayer.seek(position);
+      },
     );
   }
 }
