@@ -22,8 +22,8 @@ class _MyAppState extends State<MyApp> {
 
   Duration position = Duration.zero;
 
-  double minValue = 0;
-  double maxValue = 60;
+  int minValue = 0;
+  int maxValue = 60;
 
   @override
   void initState() {
@@ -68,7 +68,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    maxValue = duration.inMinutes as double;
+    maxValue = duration.inMinutes;
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
               position = Duration.zero;
               // duration = audioPlayer.getDuration() as Duration;
               audioPlayer.seek(Duration.zero);
-              maxValue = duration.inSeconds as double;
+              maxValue = duration.inSeconds;
             },
             children: [
               Column(
@@ -114,8 +114,8 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   MySlider(
-                      minValue: minValue,
-                      maxValue: maxValue,
+                      minValue: minValue as double,
+                      maxValue: maxValue as double,
                       position: position,
                       audioPlayer: audioPlayer),
                   Padding(
