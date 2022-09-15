@@ -20,6 +20,9 @@ class _MyAppState extends State<MyApp> {
 
   Duration position = Duration.zero;
 
+  double minValue = 0;
+  double maxValue = 60;
+
   @override
   void initState() {
     super.initState();
@@ -74,7 +77,81 @@ class _MyAppState extends State<MyApp> {
             backgroundColor: Color.fromARGB(255, 180, 183, 186),
           ),
           body: PageView(
+            onPageChanged: (value) {
+              audioPlayer.stop();
+              minValue = 0;
+              position = Duration.zero;
+              duration = audioPlayer.getDuration() as Duration;
+              maxValue = duration.inSeconds as double;
+
+              
+              
+            },
             children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
+                      width: double.infinity,
+                      height: 350,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 32,
+                  ),
+                  Text(
+                    "Wish You Here💕 ",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                  SizedBox(height: 4),
+                  Text(
+                    "Avaril Lavigne",
+                    style: TextStyle(color: Colors.black, fontSize: 16),
+                  ),
+                  Slider(
+                    min: minValue,
+                    max: maxValue,
+                    value: position.inSeconds.toDouble(),
+                    onChanged: (value) async {
+                      final position = Duration(seconds: value.toInt());
+                      await audioPlayer.seek(position);
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                            "${position.inMinutes}:${position.inSeconds % 60}"),
+                        Text(
+                            "${(duration - position).inMinutes}:${(duration - position).inSeconds % 60}"),
+                      ],
+                    ),
+                  ),
+                  CircleAvatar(
+                    radius: 35,
+                    child: IconButton(
+                      icon: Icon(isplaying ? Icons.pause : Icons.play_arrow),
+                      iconSize: 50,
+                      onPressed: () async {
+                        if (isplaying) {
+                          audioPlayer.pause();
+                          // await audioplayer.pause;
+                        } else {
+                          audioPlayer.resume();
+
+                          // audioplayer.play(URL);
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -143,64 +220,8 @@ class _MyAppState extends State<MyApp> {
                   ),
                 ],
               ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.network(
-                      "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
-                      width: double.infinity,
-                      height: 350,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 32,
-                  ),
-                  Text(
-                    "Wish You Here💕 ",
-                    style: TextStyle(color: Colors.black, fontSize: 20),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    "Avaril Lavigne",
-                    style: TextStyle(color: Colors.black, fontSize: 16),
-                  ),
-                  Slider(
-                    min: 0,
-                    max: duration.inSeconds.toDouble(),
-                    value: position.inSeconds.toDouble(),
-                    onChanged: (value) {},
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Text(formatTime(position)),
-                        // Text(formatTime(duration - position))
-                      ],
-                    ),
-                  ),
-                  CircleAvatar(
-                    radius: 35,
-                    child: IconButton(
-                      icon: Icon(isplaying ? Icons.pause : Icons.play_arrow),
-                      iconSize: 50,
-                      onPressed: () async {
-                        if (isplaying) {
-                          // await audioplayer.pause;
-                        } else {
-                          String URL =
-                              "https://www.youtube.com/watch?v=VT1-sitWRtY";
-                          // audioplayer.play(URL);
-                        }
-                      },
-                    ),
-                  ),
-                ],
-              )
+
+              //diff song
             ],
           )),
     );
