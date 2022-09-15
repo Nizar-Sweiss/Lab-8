@@ -20,7 +20,6 @@ class _MyAppState extends State<MyApp> {
 
   Duration position = Duration.zero;
 
-
   @override
   void initState() {
     super.initState();
@@ -51,7 +50,7 @@ class _MyAppState extends State<MyApp> {
     // String URL =
     //     "https://playfined";
     final player = AudioCache(prefix: 'assets/');
-    final url = await player.load("Song1.mp3");
+    final url = await player.load("Song2.mp3");
     audioPlayer.setUrl(url.path, isLocal: true);
   }
 
@@ -106,13 +105,11 @@ class _MyAppState extends State<MyApp> {
                         min: 0,
                         max: duration.inSeconds.toDouble(),
                         value: position.inSeconds.toDouble(),
-                        onChanged: (value) async{
-                          Duration(seconds: value.toInt());
+                        onChanged: (value) async {
+                          final position = Duration(seconds: value.toInt());
                           await audioPlayer.seek(position);
-                          
                         },
                       ),
-     
                     ],
                   ),
                   Padding(
@@ -120,8 +117,10 @@ class _MyAppState extends State<MyApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text("${position}"),
-                        Text("${position - duration}")
+                        Text(
+                            "${position.inMinutes}:${position.inSeconds % 60}"),
+                        Text(
+                            "${(duration - position).inMinutes}:${(duration - position).inSeconds % 60}"),
                       ],
                     ),
                   ),
