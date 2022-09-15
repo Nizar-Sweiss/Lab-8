@@ -30,6 +30,18 @@ class _MyAppState extends State<MyApp> {
         isplaying = State == PlayerState.PLAYING;
       });
     });
+
+    audioPlayer.onDurationChanged.listen((newDuration) {
+      setState(() {
+        duration = newDuration;
+      });
+    });
+
+    audioPlayer.onAudioPositionChanged.listen((newPostion) {
+      setState(() {
+        position = newPostion;
+      });
+    });
   }
 
   Future setAudio() async {
@@ -37,9 +49,9 @@ class _MyAppState extends State<MyApp> {
 
     // String URL =
     //     "https://playfined";
-final player = AudioCache(prefix: 'assets/');
-final url =await player.load("Song1.mp3");
- audioPlayer.setUrl(url.path , isLocal: true);
+    final player = AudioCache(prefix: 'assets/');
+    final url = await player.load("Song1.mp3");
+    audioPlayer.setUrl(url.path, isLocal: true);
   }
 
   @override
@@ -87,11 +99,26 @@ final url =await player.load("Song1.mp3");
                     "Avaril Lavigne",
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
-                  Slider(
-                    min: 0,
-                    max: duration.inSeconds.toDouble(),
-                    value: position.inSeconds.toDouble(),
-                    onChanged: (value) {},
+                  Column(
+                    children: [
+                      Slider(
+                        min: 0,
+                        max: duration.inSeconds.toDouble(),
+                        value: position.inSeconds.toDouble(),
+                        onChanged: (value) async{
+                          Duration(seconds: value.toInt());
+                          await audioPlayer.seek(position);
+                          
+                        },
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "${position}",
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -113,7 +140,7 @@ final url =await player.load("Song1.mp3");
                           audioPlayer.pause();
                           // await audioplayer.pause;
                         } else {
-                           audioPlayer.resume();
+                          audioPlayer.resume();
 
                           // audioplayer.play(URL);
                         }
