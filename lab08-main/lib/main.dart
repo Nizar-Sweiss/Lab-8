@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -20,8 +22,8 @@ class _MyAppState extends State<MyApp> {
 
   Duration position = Duration.zero;
 
-  // double minValue = 0;
-  // double maxValue = 60;
+  double minValue = 0;
+  double maxValue = 60;
 
   @override
   void initState() {
@@ -66,7 +68,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    // maxValue = audioPlayer.;
+    maxValue = duration.inMinutes as double;
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -80,11 +82,11 @@ class _MyAppState extends State<MyApp> {
           body: PageView(
             onPageChanged: (value) {
               audioPlayer.stop();
-              // minValue = 0;
+              minValue = 0;
               position = Duration.zero;
               // duration = audioPlayer.getDuration() as Duration;
               audioPlayer.seek(Duration.zero);
-              // maxValue = duration.inSeconds as double;
+              maxValue = duration.inSeconds as double;
             },
             children: [
               Column(
@@ -112,8 +114,8 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   MySlider(
-                      // minValue: minValue,
-                      // maxValue: maxValue,
+                      minValue: minValue,
+                      maxValue: maxValue,
                       position: position,
                       audioPlayer: audioPlayer),
                   Padding(
@@ -172,8 +174,8 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   MySlider(
-                      // minValue: minValue,
-                      // maxValue: maxValue,
+                      minValue: minValue,
+                      maxValue: maxValue,
                       position: position,
                       audioPlayer: audioPlayer),
                   Padding(
@@ -218,20 +220,22 @@ class _MyAppState extends State<MyApp> {
 class MySlider extends StatelessWidget {
   const MySlider({
     Key? key,
-    // required this.minValue,
-    // required this.maxValue,
+    required this.minValue,
+    required this.maxValue,
     required this.position,
     required this.audioPlayer,
   }) : super(key: key);
 
-  // final double minValue;
-  // final double maxValue;
+  final double minValue;
+  final double maxValue;
   final Duration position;
   final AudioPlayer audioPlayer;
 
   @override
   Widget build(BuildContext context) {
     return Slider(
+      min: minValue,
+      max: maxValue,
       value: position.inSeconds.toDouble(),
       onChanged: (value) async {
         final position = Duration(seconds: value.toInt());
