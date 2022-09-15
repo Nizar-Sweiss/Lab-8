@@ -20,6 +20,7 @@ class _MyAppState extends State<MyApp> {
 
   Duration position = Duration.zero;
 
+
   @override
   void initState() {
     super.initState();
@@ -111,13 +112,7 @@ class _MyAppState extends State<MyApp> {
                           
                         },
                       ),
-                      Row(
-                        children: [
-                          Text(
-                            "${position}",
-                          ),
-                        ],
-                      )
+     
                     ],
                   ),
                   Padding(
@@ -125,8 +120,8 @@ class _MyAppState extends State<MyApp> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // Text(formatTime(position)),
-                        // Text(formatTime(duration - position))
+                        Text("${position}"),
+                        Text("${position - duration}")
                       ],
                     ),
                   ),
