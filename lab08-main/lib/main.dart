@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
@@ -17,22 +17,17 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final audioPlayer = AudioPlayer();
   bool isplaying = false;
-
   Duration duration = Duration.zero;
-
   Duration position = Duration.zero;
-
-  int minValue = 0;
-  int maxValue = 60;
 
   @override
   void initState() {
     super.initState();
 
     setAudio();
-    audioPlayer.onPlayerStateChanged.listen((State) {
+    audioPlayer.onPlayerStateChanged.listen((state) {
       setState(() {
-        isplaying = State == PlayerState.PLAYING;
+        isplaying = state == PlayerState.PLAYING;
       });
     });
 
@@ -51,9 +46,6 @@ class _MyAppState extends State<MyApp> {
 
   Future setAudio() async {
     audioPlayer.setReleaseMode(ReleaseMode.LOOP);
-
-    // String URL =
-    //     "https://playfined";
     final player = AudioCache(prefix: 'assets/');
     final url = await player.load("Song2.mp3");
     audioPlayer.setUrl(url.path, isLocal: true);
@@ -64,11 +56,9 @@ class _MyAppState extends State<MyApp> {
     audioPlayer.dispose();
     super.dispose();
   }
-  // var audio = AudioPlayer();
 
   @override
   Widget build(BuildContext context) {
-    maxValue = duration.inMinutes;
     return MaterialApp(
       home: Scaffold(
           appBar: AppBar(
@@ -82,11 +72,8 @@ class _MyAppState extends State<MyApp> {
           body: PageView(
             onPageChanged: (value) {
               audioPlayer.stop();
-              minValue = 0;
               position = Duration.zero;
-              // duration = audioPlayer.getDuration() as Duration;
               audioPlayer.seek(Duration.zero);
-              maxValue = duration.inSeconds;
             },
             children: [
               Column(
@@ -114,8 +101,8 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   MySlider(
-                      minValue: minValue as double,
-                      maxValue: maxValue as double,
+                      minValue: 0,
+                      maxValue: 222,
                       position: position,
                       audioPlayer: audioPlayer),
                   Padding(
@@ -133,16 +120,14 @@ class _MyAppState extends State<MyApp> {
                   CircleAvatar(
                     radius: 35,
                     child: IconButton(
-                      icon: Icon(isplaying ? Icons.pause : Icons.play_arrow),
+                      icon:
+                          Icon(isplaying ? Icons.pause : Icons.play_arrow),
                       iconSize: 50,
                       onPressed: () async {
                         if (isplaying) {
                           audioPlayer.pause();
-                          // await audioplayer.pause;
                         } else {
                           audioPlayer.resume();
-
-                          // audioplayer.play(URL);
                         }
                       },
                     ),
@@ -174,8 +159,8 @@ class _MyAppState extends State<MyApp> {
                     style: TextStyle(color: Colors.black, fontSize: 16),
                   ),
                   MySlider(
-                      minValue: minValue,
-                      maxValue: maxValue,
+                      minValue: 0,
+                      maxValue: 222,
                       position: position,
                       audioPlayer: audioPlayer),
                   Padding(
@@ -193,16 +178,14 @@ class _MyAppState extends State<MyApp> {
                   CircleAvatar(
                     radius: 35,
                     child: IconButton(
-                      icon: Icon(isplaying ? Icons.pause : Icons.play_arrow),
+                      icon:
+                          Icon(isplaying ? Icons.pause : Icons.play_arrow),
                       iconSize: 50,
                       onPressed: () async {
                         if (isplaying) {
                           audioPlayer.pause();
-                          // await audioplayer.pause;
                         } else {
                           audioPlayer.resume();
-
-                          // audioplayer.play(URL);
                         }
                       },
                     ),
