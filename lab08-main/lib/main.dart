@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_constructors_in_immutables
 
+import 'dart:html';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:audioplayers/web/audioplayers_web.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -25,9 +27,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     setAudio();
-    audioPlayer.onPlayerStateChanged.listen((state) {
+    audioPlayer.onPlayerStateChanged.listen((event) {
       setState(() {
-        isplaying = state == PlayerState.PLAYING;
+        isplaying = event == PlayerState.PLAYING;
       });
     });
 
@@ -204,9 +206,14 @@ class MySlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double sliderDuration = 60;
+    audioPlayer.onDurationChanged.listen((Duration newDuration) {
+      debugPrint('Max sliderDuration: $newDuration');
+      sliderDuration = newDuration.inMilliseconds as double;
+    });
     return Slider(
       min: minValue,
-      max: maxValue,
+      max: sliderDuration,
       value: position.inSeconds.toDouble(),
       onChanged: (value) async {
         final position = Duration(seconds: value.toInt());
