@@ -62,8 +62,8 @@ class _MyAppState extends State<MyApp> {
     String imgNetworkURL =
         "https://th.bing.com/th/id/OIP.EzvVcoFwoLgsrEE8jx1a_AHaHa?pid=ImgDet&rs=1";
 
-    String musicTitle = "Wish You Here💕 ";
-    String musicSubTitle = "Avaril Lavigne";
+    String musicTitle = "Music Title";
+    String musicSubTitle = "Music SubTitle";
 
     return MaterialApp(
       home: Scaffold(
@@ -85,8 +85,8 @@ class _MyAppState extends State<MyApp> {
               MusicAlbom(
                   imgNetworkURL:
                       "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
-                  musicTitle: musicTitle,
-                  musicSubTitle: musicSubTitle,
+                  musicTitle: "Wish You Here💕",
+                  musicSubTitle: "Avaril Lavigne",
                   position: position,
                   audioPlayer: audioPlayer,
                   duration: duration,
