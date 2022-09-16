@@ -60,7 +60,8 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     String imgNetworkURL =
-        "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0";
+        "https://th.bing.com/th/id/OIP.EzvVcoFwoLgsrEE8jx1a_AHaHa?pid=ImgDet&rs=1";
+
     String musicTitle = "Wish You Here💕 ";
     String musicSubTitle = "Avaril Lavigne";
 
@@ -82,7 +83,8 @@ class _MyAppState extends State<MyApp> {
             },
             children: [
               MusicAlbom(
-                  imgNetworkURL: imgNetworkURL,
+                  imgNetworkURL:
+                      "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
                   musicTitle: musicTitle,
                   musicSubTitle: musicSubTitle,
                   position: position,
@@ -136,7 +138,7 @@ class MusicAlbom extends StatelessWidget {
             imgNetworkURL,
             width: double.infinity,
             height: 350,
-            fit: BoxFit.cover,
+            fit: BoxFit.contain,
           ),
         ),
         SizedBox(
