@@ -24,7 +24,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    setAudio();
+    setAudio(songName: "Song2.mp3");
+
     audioPlayer.onPlayerStateChanged.listen((event) {
       setState(() {
         isplaying = event == PlayerState.PLAYING;
@@ -44,10 +45,10 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future setAudio() async {
+  Future setAudio({required String songName}) async {
     audioPlayer.setReleaseMode(ReleaseMode.LOOP);
     final player = AudioCache(prefix: 'assets/');
-    final url = await player.load("Song2.mp3");
+    final url = await player.load(songName);
     audioPlayer.setUrl(url.path, isLocal: true);
   }
 
@@ -59,6 +60,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+    Color homeBackgroundColor = Color.fromARGB(130, 180, 183, 186);
     String imgNetworkURL =
         "https://th.bing.com/th/id/OIP.EzvVcoFwoLgsrEE8jx1a_AHaHa?pid=ImgDet&rs=1";
 
@@ -66,43 +68,47 @@ class _MyAppState extends State<MyApp> {
     String musicSubTitle = "Music SubTitle";
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
           // To be UnCommment after development, at deployment time. Or when ever AppBar is going to be use.
-          // appBar: AppBar(
-          //   backgroundColor: Color.fromRGBO(2, 5, 6, 3),
-          //   title: Text("Music"),
-          //   actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
-          // ),
-          drawer: Drawer(
-            backgroundColor: Color.fromARGB(255, 180, 183, 186),
+          appBar: AppBar(
+            backgroundColor: Color.fromRGBO(2, 5, 6, 3),
+            title: Text("Music"),
+            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
           ),
-          body: PageView(
-            onPageChanged: (value) {
-              audioPlayer.stop();
-              sliderPosition = Duration.zero;
-              audioPlayer.seek(Duration.zero);
-            },
-            children: [
-              MusicAlbom(
-                  imgNetworkURL:
-                      "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
-                  musicTitle: "Wish You Here💕",
-                  musicSubTitle: "Avaril Lavigne",
-                  position: sliderPosition,
-                  audioPlayer: audioPlayer,
-                  duration: sliderDuration,
-                  isplaying: isplaying),
-              MusicAlbom(
-                  imgNetworkURL: imgNetworkURL,
-                  musicTitle: musicTitle,
-                  musicSubTitle: musicSubTitle,
-                  position: sliderPosition,
-                  audioPlayer: audioPlayer,
-                  duration: sliderDuration,
-                  isplaying: isplaying),
+          drawer: Drawer(
+            backgroundColor: homeBackgroundColor,
+          ),
+          body: Container(
+            color: homeBackgroundColor,
+            child: PageView(
+              onPageChanged: (value) {
+                audioPlayer.stop();
+                sliderPosition = Duration.zero;
+                audioPlayer.seek(Duration.zero);
+              },
+              children: [
+                MusicAlbom(
+                    imgNetworkURL:
+                        "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
+                    musicTitle: "Wish You Here💕",
+                    musicSubTitle: "Avaril Lavigne",
+                    position: sliderPosition,
+                    audioPlayer: audioPlayer,
+                    duration: sliderDuration,
+                    isplaying: isplaying),
+                MusicAlbom(
+                    imgNetworkURL: imgNetworkURL,
+                    musicTitle: musicTitle,
+                    musicSubTitle: musicSubTitle,
+                    position: sliderPosition,
+                    audioPlayer: audioPlayer,
+                    duration: sliderDuration,
+                    isplaying: isplaying),
 
-              //diff song
-            ],
+                //diff song
+              ],
+            ),
           )),
     );
   }
@@ -165,9 +171,8 @@ class MusicAlbom extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text("${position.inMinutes}:${position.inSeconds % 60}"),
-              Text(
-                  "${(duration - position).inMinutes}:${(duration - position).inSeconds % 60}"),
+              Text(getMusicPositionForSlider(position)),
+              Text(getMusicDurationLeftForSlider(position, duration)),
             ],
           ),
         ),
@@ -216,4 +221,15 @@ class MySlider extends StatelessWidget {
       },
     );
   }
+}
+
+String getMusicPositionForSlider(Duration position) {
+  String timeLeft = "${position.inMinutes}:${position.inSeconds % 60}";
+  return timeLeft;
+}
+
+String getMusicDurationLeftForSlider(Duration position, Duration duration) {
+  String timeLeft =
+      "${(duration - position).inMinutes}:${(duration - position).inSeconds % 60}";
+  return timeLeft;
 }
