@@ -17,8 +17,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final audioPlayer = AudioPlayer();
   bool isplaying = false;
-  Duration duration = Duration.zero;
-  Duration position = Duration.zero;
+  Duration sliderDuration = Duration.zero;
+  Duration sliderPosition = Duration.zero;
 
   @override
   void initState() {
@@ -33,13 +33,13 @@ class _MyAppState extends State<MyApp> {
 
     audioPlayer.onDurationChanged.listen((newDuration) {
       setState(() {
-        duration = newDuration;
+        sliderDuration = newDuration;
       });
     });
 
     audioPlayer.onAudioPositionChanged.listen((newPostion) {
       setState(() {
-        position = newPostion;
+        sliderPosition = newPostion;
       });
     });
   }
@@ -67,18 +67,19 @@ class _MyAppState extends State<MyApp> {
 
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Color.fromRGBO(2, 5, 6, 3),
-            title: Text("Music"),
-            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
-          ),
+          // To be UnCommment after development, at deployment time. Or when ever AppBar is going to be use.
+          // appBar: AppBar(
+          //   backgroundColor: Color.fromRGBO(2, 5, 6, 3),
+          //   title: Text("Music"),
+          //   actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
+          // ),
           drawer: Drawer(
             backgroundColor: Color.fromARGB(255, 180, 183, 186),
           ),
           body: PageView(
             onPageChanged: (value) {
               audioPlayer.stop();
-              position = Duration.zero;
+              sliderPosition = Duration.zero;
               audioPlayer.seek(Duration.zero);
             },
             children: [
@@ -87,17 +88,17 @@ class _MyAppState extends State<MyApp> {
                       "https://th.bing.com/th/id/R.5ba6305ac7882af973e81b6556ad56eb?rik=i6TxTrzaK1TCaQ&pid=ImgRaw&r=0",
                   musicTitle: "Wish You Here💕",
                   musicSubTitle: "Avaril Lavigne",
-                  position: position,
+                  position: sliderPosition,
                   audioPlayer: audioPlayer,
-                  duration: duration,
+                  duration: sliderDuration,
                   isplaying: isplaying),
               MusicAlbom(
                   imgNetworkURL: imgNetworkURL,
                   musicTitle: musicTitle,
                   musicSubTitle: musicSubTitle,
-                  position: position,
+                  position: sliderPosition,
                   audioPlayer: audioPlayer,
-                  duration: duration,
+                  duration: sliderDuration,
                   isplaying: isplaying),
 
               //diff song
@@ -154,10 +155,11 @@ class MusicAlbom extends StatelessWidget {
           style: TextStyle(color: Colors.black, fontSize: 16),
         ),
         MySlider(
-            minValue: 0,
-            maxValue: 222,
-            position: position,
-            audioPlayer: audioPlayer),
+          maxValue: duration.inSeconds + 0, // Works, to convert int to Double
+          // maxValue: duration.inSeconds as Double, // does NOT Work, to convert int to Double
+          position: position,
+          audioPlayer: audioPlayer,
+        ),
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
@@ -191,26 +193,21 @@ class MusicAlbom extends StatelessWidget {
 class MySlider extends StatelessWidget {
   const MySlider({
     Key? key,
-    required this.minValue,
     required this.maxValue,
     required this.position,
     required this.audioPlayer,
   }) : super(key: key);
 
-  final double minValue;
   final double maxValue;
   final Duration position;
   final AudioPlayer audioPlayer;
 
   @override
   Widget build(BuildContext context) {
-    double sliderDuration = 60;
-    audioPlayer.onDurationChanged.listen((Duration newDuration) {
-      debugPrint('Max sliderDuration: $newDuration');
-      sliderDuration = newDuration.inMilliseconds as double;
-    });
+    double sliderDuration = maxValue;
+    print("sliderDuration = $sliderDuration");
+    print("position = ${position.inSeconds.toDouble()}");
     return Slider(
-      min: minValue,
       max: sliderDuration,
       value: position.inSeconds.toDouble(),
       onChanged: (value) async {
